@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+from matplotlib.ticker import MultipleLocator
 import sys
 
 if len(sys.argv) != 2:
@@ -48,7 +49,7 @@ plt.rcParams.update({
 })
 
 mult=1
-fig, axes = plt.subplots(2, 1, sharex=True, figsize=(12*mult, 4*mult))
+fig, axes = plt.subplots(2, 1, sharex=True, figsize=(12*mult, 2.5*mult))
 
 x = np.arange(len(smr_order)) #* len(allocators)
 width = 0.95 / len(ds_list)
@@ -135,6 +136,10 @@ for j, allocator in enumerate(allocators):
     #margin extend
     ax.set_xlim(x.min() - width, x.max() + width * len(ds_list))
     ax.margins(x=0)
+    #grid
+    maxy = int((int(ax_.get_ylim()[1]) / 10)) * 10
+    ax_.yaxis.set_major_locator(MultipleLocator(maxy / 5))
+    ax_.grid(True, which="major", axis="y")
 
 legs.pop()
 for l in legs:
