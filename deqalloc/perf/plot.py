@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from matplotlib.ticker import MultipleLocator
+from matplotlib.lines import Line2D
 import sys
 
 if len(sys.argv) != 2:
@@ -42,7 +43,7 @@ allocators = df["allocator"].unique()
 # ---------- Plot styling ----------
 plt.rcParams.update({
     "font.size": 11,
-    "axes.grid": True,
+    #"axes.grid": True,
     "grid.linestyle": "--",
     "grid.alpha": 0.5,
     "axes.formatter.use_mathtext": True,
@@ -51,11 +52,12 @@ plt.rcParams.update({
 mult=1
 fig, axes = plt.subplots(2, 1, sharex=True, figsize=(12*mult, 2.5*mult))
 
-x = np.arange(len(smr_order)) #* len(allocators)
+x = np.arange(len(smr_order))
 width = 0.95 / len(ds_list)
 
 ds_hatches = ['..', 'oo', 'OO', 'O.']
-allocator_hatches = ['\\\\', '////']
+#allocator_hatches = ['\\\\', '////']
+allocator_hatches = [None, None]
 
 colors = ["orangered", "royalblue", "forestgreen", "gold"]
 
@@ -87,7 +89,7 @@ for i, ds in enumerate(ds_list):
             x + i * width,
             y,
             width,
-            hatch=ds_hatches[i % len(ds_hatches)] + allocator_hatches[j],
+            hatch=ds_hatches[i % len(ds_hatches)],# + allocator_hatches[j],
             edgecolor="black",
             alpha=1,
             color=colors[i],
@@ -119,13 +121,16 @@ legs.append(ax.legend(
 for j, allocator in enumerate(allocators):
     ax_ = axes[j]
     #allocator legend
-    p = [Patch(
-        facecolor="white",
-        edgecolor="black",
-        hatch=allocator_hatches[j],
-        label=allocator)]
+    #p = [Patch(
+    #    facecolor="white",
+    #    edgecolor="black",
+    #    hatch=allocator_hatches[j],
+    #    label=allocator)]
+    handles = [Line2D([], [], linestyle="none", label=alloc) for alloc in [allocator]]
     legs.append(ax_.legend(
-        handles=p,
+        handles=handles,
+        handlelength=0,
+        handletextpad=0,
         frameon=True,
         fontsize=9,
         ncol=1,
